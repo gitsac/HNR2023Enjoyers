@@ -30,6 +30,8 @@ def wipedb():
     updateJSON()
 
 def addMember(name):
+    global people
+    global db
     people.append(name)
     db[name] = {}
     for person in people:
@@ -54,26 +56,28 @@ def addOweTransaction(person1, person2, amount):
 
 
 def tabulise(database):
-    if len(people) == 0:
-        return
-    # populate cell data into matplot
-    data = []
-    for person in people:
-        curOwes = []
-        subjects = database[person]
-        for person2 in subjects:
-            curOwes.append(subjects[person2])
-        data.append(curOwes)
+    try: 
+        # populate cell data into matplot
+        data = []
+        for person in people:
+            curOwes = []
+            subjects = database[person]
+            for person2 in subjects:
+                curOwes.append(subjects[person2])
+            data.append(curOwes)
 
-    fig, ax = plt.subplots()
+        fig, ax = plt.subplots()
 
-    # hide axes
-    fig.patch.set_visible(False)
-    ax.axis('off')
-    ax.axis('tight')
+        # hide axes
+        fig.patch.set_visible(False)
+        ax.axis('off')
+        ax.axis('tight')
 
-    ax.table(cellText = data, rowLabels = people, colLabels = people, loc = 'center')
-    fig.tight_layout()
+
+        ax.table(cellText = data, rowLabels = people, colLabels = people, loc = 'center')
+        fig.tight_layout()
+    except:
+        pass
     
 
 def getImage():
