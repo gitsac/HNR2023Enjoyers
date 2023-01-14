@@ -50,7 +50,19 @@ def netOwe(person1, person2): # person 1 owes person 2 $X
     return db[person1][person2] - db[person2][person1] 
 
 def addOweTransaction(person1, person2, amount):
-    db[person1][person2] += amount
+    p1op2 = db[person1][person2]
+    p2op1 = db[person2][person1]
+    p1op2 += amount
+    total = p1op2 - p2op1
+    if total < 0:
+        p2op1 = total
+        p1op2 = 0
+    else:
+        p1op2 = total 
+        p2op1 = 0
+    db[person1][person2] = p1op2
+    db[person2][person1] = p2op1
+
     addLog(person1, person2, amount)
     print("transaction added")
 
