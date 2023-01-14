@@ -25,15 +25,16 @@ def markup_users():
 
     return markup
 
-@bot.message_handler(commands=['config'])
+@bot.message_handler(commands=['start'])
 def config(message):
     bot.reply_to(message, "Config mode", reply_markup = markup_inline())
 
 amount = -1
-user = "myself"
+user = "other"
 
 @bot.callback_query_handler(func=lambda callback: callback.data)
 def callback_query(call):
+    global user
     oweMode = False
     if call.data == "i-owe":
         oweMode = True
@@ -47,14 +48,17 @@ def callback_query(call):
     elif call.data == "amount":
         msg = bot.send_message(call.message.chat.id, "What is the amount?")
         bot.register_next_step_handler(msg, handleAmount)
+    elif user == "other" and call.data in people:
+        user = call.data
+        bot.send_message(call.message.chat.id, text = "Who are you?", reply_markup = markup_users())
     else: 
         if call.data in people:
             if oweMode:
-                handleIOwe(user, call.data, amount)
-                bot.send_message(call.message.chat.id, text = "you owe " + call.data + " " + str(amount)) 
+                handleIOwe(call.data, user, amount)
+                bot.send_message(call.message.chat.id, text = call.data + " owe " + user + " " + str(amount)) 
             else: 
-                handleSomeoneOwe(user, call.data, amount)
-                bot.send_message(call.message.chat.id, text = call.data + " owes you" + " " + str(amount)) 
+                handleSomeoneOwe(call.data, user, amount)
+                bot.send_message(call.message.chat.id, text = user + " owes " + call.data + " " + str(amount)) 
 
 def handleIOwe(name1, name2, amount):
     addOweTransaction(name1, name2, amount) 
@@ -64,6 +68,7 @@ def handleSomeoneOwe(name1, name2, amount):
 
 def addUserToPeople(message):
     addMember(message.text)
+    bot.send_message(message.chat.id, "Added success")
 
 def handleAmount(message):
     global amount
