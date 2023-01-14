@@ -10,6 +10,7 @@ def markup_inline():
     markup.add(
         InlineKeyboardButton("I owe someone money", callback_data = "i-owe"),
         InlineKeyboardButton("Someone owe me", callback_data = "someone-owe"),
+        InlineKeyboardButton("I pay", callback_data = "pay"),
         InlineKeyboardButton("Add User", callback_data = "addUser"),
         InlineKeyboardButton("Clear data", callback_data= 'clear')
     )
@@ -33,7 +34,7 @@ def config(message):
 amount = -1
 user = "other"
 me = "me"
-oweMode = False
+oweMode = -1
 
 @bot.callback_query_handler(func=lambda callback: callback.data)
 def callback_query(call):
@@ -41,11 +42,14 @@ def callback_query(call):
     global oweMode
     global me
     if call.data == "i-owe":
-        oweMode = True
+        oweMode = 0
         bot.send_message(call.message.chat.id, text = "Who do you owe?", reply_markup = markup_users())
     elif call.data == "someone-owe":
-        oweMode = False
+        oweMode = 1
         bot.send_message(call.message.chat.id, text = "Who owes you?", reply_markup = markup_users())
+    elif call.data == "pay":
+        oweMode = 2
+        bot.send_message(call.message.chat.id, text = "Who have you paid?", reply_markup = markup_users())
     elif call.data == "addUser":
         msg = bot.send_message(call.message.chat.id, "Who is being added?")
         bot.register_next_step_handler(msg, addUserToPeople)
@@ -77,11 +81,15 @@ def handleAmount(message):
     global me
     global amount
     amount = int(message.text)
-    if oweMode:
+    if oweMode == 0:
         handleIOwe(me, user, amount)
         bot.send_message(message.chat.id, text = me + " owe " + user + " " + str(amount)) 
-    else: 
+    elif oweMode == 1: 
         handleSomeoneOwe(me, user, amount)
         bot.send_message(message.chat.id, text = user + " owes " + me + " " + str(amount)) 
+    else: 
+        handleIOwe(me, user, -1 * amount) 
+        bot.send_message(message.chat.id, text = me + " paid " + user + " " + str(amount)) 
+
     user = "other"
 
