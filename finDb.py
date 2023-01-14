@@ -36,7 +36,7 @@ def tabulise(database):
     ax.axis('off')
     ax.axis('tight')
 
-    ax.table(cellText = data, rowLabels = people, colLabels = people)
+    ax.table(cellText = data, rowLabels = people, colLabels = people, loc = 'center')
     fig.tight_layout()
 
 def getImage():
