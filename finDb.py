@@ -17,30 +17,31 @@ def netOwe(person1, person2): # person 1 owes person 2 $X
 def addOweTransaction(person1, person2, amount):
     db[person1][person2] += amount
 
-# populate cell data into matplot
-data = []
-for person in people:
-    curOwes = []
-    subjects = db[person]
-    for person2 in subjects:
-        curOwes.append(subjects[person2])
-    data.append(curOwes)
 
-columnLabels = people
-row_labels = people
-fig, ax = plt.subplots()
+def tabulise(database):
+    # populate cell data into matplot
+    data = []
+    for person in people:
+        curOwes = []
+        subjects = db[person]
+        for person2 in subjects:
+            curOwes.append(subjects[person2])
+        data.append(curOwes)
 
-# hide axes
-fig.patch.set_visible(False)
-ax.axis('off')
-ax.axis('tight')
+    fig, ax = plt.subplots()
 
-ax.table(cellText = data, rowLabels = people, colLabels = people)
-fig.tight_layout()
+    # hide axes
+    fig.patch.set_visible(False)
+    ax.axis('off')
+    ax.axis('tight')
 
-plt.show()
+    ax.table(cellText = data, rowLabels = people, colLabels = people)
+    fig.tight_layout()
 
-
-
-
+def sendImage(bot, database):
+    tabulise(database)
+    buf = BytesIO()
+    plt.savefig(buf, format='png', bbox_inches = 'tight')
+    buf.seek(0)
+    bot.send_photo(message.chat.id, buf)
 
