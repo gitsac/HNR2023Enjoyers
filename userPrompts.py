@@ -2,7 +2,7 @@
 from init_bot import bot
 from finDb import addMember
 from telebot.types import InlineKeyboardMarkup, InlineKeyboardButton
-from finDb import addOweTransaction, people
+from finDb import addOweTransaction, people, wipedb
 
 def markup_inline():
     markup = InlineKeyboardMarkup()
@@ -10,7 +10,8 @@ def markup_inline():
     markup.add(
         InlineKeyboardButton("I owe someone money", callback_data = "i-owe"),
         InlineKeyboardButton("Someone owe me", callback_data = "someone-owe"),
-        InlineKeyboardButton("Add User", callback_data = "addUser")
+        InlineKeyboardButton("Add User", callback_data = "addUser"),
+        InlineKeyboardButton("Clear data", callback_data= 'clear')
     )
     return markup
 
@@ -48,6 +49,9 @@ def callback_query(call):
     elif call.data == "addUser":
         msg = bot.send_message(call.message.chat.id, "Who is being added?")
         bot.register_next_step_handler(msg, addUserToPeople)
+    elif call.data == 'clear':
+        wipedb()
+        bot.send_message(call.message.chat.id, "Database wiped")
     elif user == "other" and call.data in people:
         user = call.data
         bot.send_message(call.message.chat.id, text = "Who are you?", reply_markup = markup_users())

@@ -22,6 +22,13 @@ def updateJSON():
     with open('data.json', 'w') as fp:
         json.dump(db, fp)
 
+def wipedb():
+    global db
+    global people
+    db = {}
+    people = []
+    updateJSON()
+
 def addMember(name):
     people.append(name)
     db[name] = {}
