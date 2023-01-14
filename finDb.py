@@ -2,10 +2,13 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
+import json
 
-people = [] # placeholder, needs to get list members from tele API
+with open("data.json", "r") as json_data:
+    db = json.load(json_data)
+print(db)
 
-db = {}
+people = list(db.keys()) # placeholder, needs to get list members from tele API
 logDb = []
 
 for person in people:
@@ -16,6 +19,10 @@ for person in people:
 def addLog(person1, person2, amount):
     logDb.append(str(datetime.datetime.now()) + ": " + person1 + " owe " + person2 + "$" + amount)
 
+def updateJSON():
+    with open('data.json', 'w') as fp:
+        json.dump(db, fp)
+
 def addMember(name):
     people.append(name)
     db[name] = {}
@@ -24,6 +31,7 @@ def addMember(name):
     for key in people:
         if key != name:
             db[key][name] = 0
+    updateJSON()
     print("added success!")
     
 def userExists(name):
@@ -70,4 +78,4 @@ def getImage():
     return buf
 
 
-tabulise(db)
+print(db)
