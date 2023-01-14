@@ -38,6 +38,7 @@ oweMode = False
 def callback_query(call):
     global user
     global oweMode
+    global me
     if call.data == "i-owe":
         oweMode = True
         bot.send_message(call.message.chat.id, text = "Who do you owe?", reply_markup = markup_users())
@@ -52,6 +53,7 @@ def callback_query(call):
         bot.send_message(call.message.chat.id, text = "Who are you?", reply_markup = markup_users())
     else: 
         if call.data in people:
+            me = call.data
             msg = bot.send_message(call.message.chat.id, text="What is the amount?")
             bot.register_next_step_handler(msg, handleAmount)
 
@@ -77,4 +79,5 @@ def handleAmount(message):
     else: 
         handleSomeoneOwe(me, user, amount)
         bot.send_message(message.chat.id, text = user + " owes " + me + " " + str(amount)) 
+    user = "other"
 
