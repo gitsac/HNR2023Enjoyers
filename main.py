@@ -1,9 +1,6 @@
-from init_bot import get_bot
-from start import handle_start
-from image import handle_image
-
-bot = get_bot()
-handle_start(bot)
-handle_image(bot)
+from init_bot import bot
+import payfor
+import owe
+import start
 
 bot.polling()
