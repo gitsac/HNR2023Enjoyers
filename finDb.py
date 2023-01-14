@@ -6,7 +6,6 @@ import json
 
 with open("data.json", "r") as json_data:
     db = json.load(json_data)
-print(db)
 
 people = list(db.keys()) # placeholder, needs to get list members from tele API
 logDb = []
@@ -44,6 +43,7 @@ def netOwe(person1, person2): # person 1 owes person 2 $X
 def addOweTransaction(person1, person2, amount):
     db[person1][person2] += amount
     addLog(person1, person2, amount)
+    print("transaction added")
 
 
 def tabulise(database):
@@ -68,7 +68,6 @@ def tabulise(database):
     ax.table(cellText = data, rowLabels = people, colLabels = people, loc = 'center')
     fig.tight_layout()
     
-    print(data)
 
 def getImage():
     tabulise(db)
@@ -77,5 +76,3 @@ def getImage():
     buf.seek(0)
     return buf
 
-
-print(db)
