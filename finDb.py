@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from io import BytesIO
 
-people = ["a", "b", "c"] # placeholder, needs to get list members from tele API
+people = [] # placeholder, needs to get list members from tele API
 
 db = {}
 
@@ -11,6 +11,19 @@ for person in people:
     db[person] = {}
     for subject in people:
         db[person][subject] = 0
+
+def addMember(name, people):
+    people.append(name)
+    db[name] = {}
+    for person in people:
+        db[name][person] = 0
+    for key in people:
+        if key != name:
+            db[key][name] = 0
+    
+def userExists(name):
+    return name in people
+            
 
 def netOwe(person1, person2): # person 1 owes person 2 $X
     return db[person1][person2] - db[person2][person1] 
@@ -38,6 +51,8 @@ def tabulise(database):
 
     ax.table(cellText = data, rowLabels = people, colLabels = people, loc = 'center')
     fig.tight_layout()
+    
+    print(data)
 
 def getImage():
     tabulise(db)
@@ -46,3 +61,5 @@ def getImage():
     buf.seek(0)
     return buf
 
+
+tabulise(db)
