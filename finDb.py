@@ -6,11 +6,15 @@ from io import BytesIO
 people = [] # placeholder, needs to get list members from tele API
 
 db = {}
+logDb = []
 
 for person in people:
     db[person] = {}
     for subject in people:
         db[person][subject] = 0
+
+def addLog(person1, person2, amount):
+    logDb.append(str(datetime.datetime.now()) + ": " + person1 + " owe " + person2 + "$" + amount)
 
 def addMember(name, people):
     people.append(name)
@@ -30,6 +34,7 @@ def netOwe(person1, person2): # person 1 owes person 2 $X
 
 def addOweTransaction(person1, person2, amount):
     db[person1][person2] += amount
+    addLog(person1, person2, amount)
 
 
 def tabulise(database):
