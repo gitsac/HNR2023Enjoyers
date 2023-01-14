@@ -48,7 +48,7 @@ def callback_query(call):
         oweMode = 1
         bot.send_message(call.message.chat.id, text = "Who owes you?", reply_markup = markup_users())
     elif call.data == "pay":
-        oweMode = 2
+        oweMode = 1
         bot.send_message(call.message.chat.id, text = "Who have you paid?", reply_markup = markup_users())
     elif call.data == "addUser":
         msg = bot.send_message(call.message.chat.id, "Who is being added?")
@@ -84,12 +84,9 @@ def handleAmount(message):
     if oweMode == 0:
         handleIOwe(me, user, amount)
         bot.send_message(message.chat.id, text = me + " owe " + user + " " + str(amount)) 
-    elif oweMode == 1: 
+    else: 
         handleSomeoneOwe(me, user, amount)
         bot.send_message(message.chat.id, text = user + " owes " + me + " " + str(amount)) 
-    else: 
-        handleIOwe(me, user, -1 * amount) 
-        bot.send_message(message.chat.id, text = me + " paid " + user + " " + str(amount)) 
 
     user = "other"
 
