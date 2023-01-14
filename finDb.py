@@ -82,7 +82,3 @@ def getImage():
     plt.savefig(buf, format='png', bbox_inches = 'tight')
     buf.seek(0)
     return buf
-
-addMember("me")
-addMember("myself")
-addMember("i")
