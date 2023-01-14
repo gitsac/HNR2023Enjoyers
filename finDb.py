@@ -9,14 +9,14 @@ with open("data.json", "r") as json_data:
 
 people = list(db.keys()) # placeholder, needs to get list members from tele API
 logDb = []
-
+db = {}
 for person in people:
     db[person] = {}
     for subject in people:
         db[person][subject] = 0
 
 def addLog(person1, person2, amount):
-    logDb.append(str(datetime.datetime.now()) + ": " + person1 + " owe " + person2 + "$" + amount)
+    logDb.append(": " + person1 + " owe " + person2 + "$" + str(amount))
 
 def updateJSON():
     with open('data.json', 'w') as fp:
@@ -76,3 +76,6 @@ def getImage():
     buf.seek(0)
     return buf
 
+addMember("me")
+addMember("myself")
+addMember("i")
