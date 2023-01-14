@@ -33,6 +33,8 @@ def addOweTransaction(person1, person2, amount):
 
 
 def tabulise(database):
+    if len(people) == 0:
+        return
     # populate cell data into matplot
     data = []
     for person in people:
