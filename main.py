@@ -4,6 +4,7 @@ import payfor
 import owe
 import start
 import image
+import addUser
 # import transactions
 
 bot.polling()

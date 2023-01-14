@@ -16,7 +16,7 @@ for person in people:
 def addLog(person1, person2, amount):
     logDb.append(str(datetime.datetime.now()) + ": " + person1 + " owe " + person2 + "$" + amount)
 
-def addMember(name, people):
+def addMember(name):
     people.append(name)
     db[name] = {}
     for person in people:
@@ -24,6 +24,7 @@ def addMember(name, people):
     for key in people:
         if key != name:
             db[key][name] = 0
+    print("added success!")
     
 def userExists(name):
     return name in people
