@@ -1,6 +1,7 @@
 # importing packages and modules
 import numpy as np
 import matplotlib.pyplot as plt
+from io import BytesIO
 
 people = ["a", "b", "c"] # placeholder, needs to get list members from tele API
 
@@ -38,10 +39,10 @@ def tabulise(database):
     ax.table(cellText = data, rowLabels = people, colLabels = people)
     fig.tight_layout()
 
-def sendImage(bot):
+def getImage():
     tabulise(db)
     buf = BytesIO()
     plt.savefig(buf, format='png', bbox_inches = 'tight')
     buf.seek(0)
-    bot.send_photo(message.chat.id, buf)
+    return buf
 
