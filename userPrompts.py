@@ -31,11 +31,13 @@ def config(message):
 
 amount = -1
 user = "other"
+me = "me"
+oweMode = False
 
 @bot.callback_query_handler(func=lambda callback: callback.data)
 def callback_query(call):
     global user
-    oweMode = False
+    global oweMode
     if call.data == "i-owe":
         oweMode = True
         bot.send_message(call.message.chat.id, text = "Who do you owe?", reply_markup = markup_users())
@@ -45,20 +47,13 @@ def callback_query(call):
     elif call.data == "addUser":
         msg = bot.send_message(call.message.chat.id, "Who is being added?")
         bot.register_next_step_handler(msg, addUserToPeople)
-    elif call.data == "amount":
-        msg = bot.send_message(call.message.chat.id, "What is the amount?")
-        bot.register_next_step_handler(msg, handleAmount)
     elif user == "other" and call.data in people:
         user = call.data
         bot.send_message(call.message.chat.id, text = "Who are you?", reply_markup = markup_users())
     else: 
         if call.data in people:
-            if oweMode:
-                handleIOwe(call.data, user, amount)
-                bot.send_message(call.message.chat.id, text = call.data + " owe " + user + " " + str(amount)) 
-            else: 
-                handleSomeoneOwe(call.data, user, amount)
-                bot.send_message(call.message.chat.id, text = user + " owes " + call.data + " " + str(amount)) 
+            msg = bot.send_message(call.message.chat.id, text="What is the amount?")
+            bot.register_next_step_handler(msg, handleAmount)
 
 def handleIOwe(name1, name2, amount):
     addOweTransaction(name1, name2, amount) 
@@ -71,6 +66,15 @@ def addUserToPeople(message):
     bot.send_message(message.chat.id, "Added success")
 
 def handleAmount(message):
+    global oweMode
+    global user
+    global me
     global amount
-    amount = message.text
+    amount = int(message.text)
+    if oweMode:
+        handleIOwe(me, user, amount)
+        bot.send_message(message.chat.id, text = me + " owe " + user + " " + str(amount)) 
+    else: 
+        handleSomeoneOwe(me, user, amount)
+        bot.send_message(message.chat.id, text = user + " owes " + me + " " + str(amount)) 
 
