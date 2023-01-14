@@ -23,7 +23,7 @@ def tabulise(database):
     data = []
     for person in people:
         curOwes = []
-        subjects = db[person]
+        subjects = database[person]
         for person2 in subjects:
             curOwes.append(subjects[person2])
         data.append(curOwes)
@@ -38,8 +38,8 @@ def tabulise(database):
     ax.table(cellText = data, rowLabels = people, colLabels = people)
     fig.tight_layout()
 
-def sendImage(bot, database):
-    tabulise(database)
+def sendImage(bot):
+    tabulise(db)
     buf = BytesIO()
     plt.savefig(buf, format='png', bbox_inches = 'tight')
     buf.seek(0)
