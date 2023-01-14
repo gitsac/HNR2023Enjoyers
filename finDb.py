@@ -66,6 +66,11 @@ def addOweTransaction(person1, person2, amount):
     addLog(person1, person2, amount)
     print("transaction added")
 
+def addListOweTransaction(listOfpeople, payer, amount):
+    numPpl = len(listOfpeople)
+    adjustedAmount = amount / numPpl
+    for person in listOfpeople:
+        addOweTransaction(person, payer, adjustedAmount)
 
 def tabulise(database):
     try: 
